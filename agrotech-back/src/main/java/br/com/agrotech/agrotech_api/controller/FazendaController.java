@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * Controlador REST responsável por expor os endpoints HTTP referentes à entidade {@link Fazenda}.
  * <p>
- * Provê rotas para criação e listagem de propriedades rurais integradas ao ecossistema.
+ * Provê rotas para criação, consulta, atualização e remoção de propriedades rurais.
  * </p>
  */
 @RestController
@@ -35,6 +35,20 @@ public class FazendaController {
     }
 
     /**
+     * Endpoint para buscar uma fazenda específica pelo seu identificador único.
+     * Rota de acesso: GET /api/fazendas/{id}
+     *
+     * @param id Identificador único da fazenda informado na URL.
+     * @return {@link ResponseEntity} com a {@link Fazenda} encontrada e status 200 (OK), ou 404 (Not Found).
+     */
+    @GetMapping("/{id}")
+    public ResponseEntity<Fazenda> buscarPorId(@PathVariable Long id) {
+        return fazendaService.buscarPorId(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    /**
      * Endpoint para cadastrar uma nova fazenda no sistema.
      * Rota de acesso: POST /api/fazendas
      *
@@ -45,5 +59,40 @@ public class FazendaController {
     public ResponseEntity<Fazenda> cadastrar(@RequestBody Fazenda fazenda) {
         Fazenda novaFazenda = fazendaService.salvar(fazenda);
         return ResponseEntity.status(HttpStatus.CREATED).body(novaFazenda);
+    }
+
+    /**
+     * Endpoint para atualizar os dados de uma fazenda existente.
+     * Rota de acesso: PUT /api/fazendas/{id}
+     *
+     * @param id Identificador único da fazenda a ser atualizada.
+     * @param fazenda Objeto contendo os novos dados da fazenda enviados no corpo da requisição.
+     * @return {@link ResponseEntity} com a {@link Fazenda} atualizada e status 200 (OK), ou 404 (Not Found).
+     */
+    @PutMapping("/{id}")
+    public ResponseEntity<Fazenda> atualizar(@PathVariable Long id, @RequestBody Fazenda fazenda) {
+        try {
+            Fazenda fazendaAtualizada = fazendaService.atualizar(id, fazenda);
+            return ResponseEntity.ok(fazendaAtualizada);
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    /**
+     * Endpoint para remover uma fazenda do sistema pelo seu identificador.
+     * Rota de acesso: DELETE /api/fazendas/{id}
+     *
+     * @param id Identificador único da fazenda a ser removida.
+     * @return {@link ResponseEntity} sem conteúdo com status 204 (No Content), ou 404 (Not Found).
+     */
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletar(@PathVariable Long id) {
+        try {
+            fazendaService.deletar(id);
+            return ResponseEntity.noContent().build();
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 }

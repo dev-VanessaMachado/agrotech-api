@@ -1,0 +1,81 @@
+### ==========================================
+### 1. TESTES DE FAZENDA
+### ==========================================
+
+### Cadastrar Nova Fazenda
+POST http://127.0.0.1:8080/api/fazendas
+Content-Type: application/json
+
+{
+  "nome": "Fazenda Boa Vista",
+  "localizacao": "Barreiras - BA",
+  "areaHectares": 250.5
+}
+
+### Listar Todas as Fazendas
+GET http://127.0.0.1:8080/api/fazendas
+
+
+### ==========================================
+### 2. TESTES DE DISPOSITIVO
+### ==========================================
+
+### Cadastrar Novo Dispositivo (Vinculado à Fazenda ID 1)
+POST http://127.0.0.1:8080/api/dispositivos
+Content-Type: application/json
+
+{
+  "nomeModelo": "Sensor IoT Soil-V1",
+  "dataInstalacao": "2026-07-20",
+  "status": "ATIVO",
+  "fazenda": {
+    "id": 1
+  }
+}
+
+### Listar Todos os Dispositivos
+GET http://127.0.0.1:8080/api/dispositivos
+
+
+### ==========================================
+### 3. TESTES DE LEITURA (TELEMETRIA)
+### ==========================================
+
+### Registrar Leitura de Campo (Vinculada ao Dispositivo ID 1)
+POST http://127.0.0.1:8080/api/leituras
+Content-Type: application/json
+
+{
+  "phSolo": 6.5,
+  "umidadeSolo": 45.2,
+  "temperaturaAr": 28.4,
+  "dataHoraCaptura": "2026-07-20T14:30:00",
+  "dispositivo": {
+    "id": 1
+  }
+}
+
+### Listar Histórico de Leituras
+GET http://127.0.0.1:8080/api/leituras
+
+
+### ==========================================
+### 4. TESTES DE ALERTA
+### ==========================================
+
+### Disparar Alerta de Anomalia (Vinculado ao Dispositivo ID 1)
+POST http://127.0.0.1:8080/api/alertas
+Content-Type: application/json
+
+{
+  "descricao": "Nível de umidade abaixo do limite crítico na zona norte.",
+  "severidade": "ALTA",
+  "dataHoraDisparo": "2026-07-20T14:35:00",
+  "resolvido": false,
+  "dispositivo": {
+    "id": 1
+  }
+}
+
+### Listar Todos os Alertas
+GET http://127.0.0.1:8080/api/alertas

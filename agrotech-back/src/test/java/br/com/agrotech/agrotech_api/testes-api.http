@@ -1,81 +1,133 @@
 ### ==========================================
-### 1. TESTES DE FAZENDA
+### 1. FLUXO COMPLETO: FAZENDA
 ### ==========================================
 
-### Cadastrar Nova Fazenda
+### 1.1 Cadastrar Fazenda
 POST http://127.0.0.1:8080/api/fazendas
 Content-Type: application/json
 
 {
-  "nome": "Fazenda Boa Vista",
-  "localizacao": "Barreiras - BA",
-  "areaHectares": 250.5
+  "nome": "Fazenda Santa Maria",
+  "localizacao": "Luís Eduardo Magalhães - BA",
+  "areaHectares": 500.0
 }
 
-### Listar Todas as Fazendas
+### 1.2 Listar Todas as Fazendas
 GET http://127.0.0.1:8080/api/fazendas
 
+### 1.3 Buscar Fazenda por ID (Sucesso - 200 OK)
+GET http://127.0.0.1:8080/api/fazendas/1
+
+### 1.4 Atualizar Fazenda (PUT - 200 OK)
+PUT http://127.0.0.1:8080/api/fazendas/1
+Content-Type: application/json
+
+{
+  "nome": "Fazenda Santa Maria II",
+  "localizacao": "Luís Eduardo Magalhães - BA",
+  "areaHectares": 650.0
+}
+
+### 1.5 Buscar Fazenda com ID Inexistente (Erro - 404 Not Found)
+GET http://127.0.0.1:8080/api/fazendas/999
+
 
 ### ==========================================
-### 2. TESTES DE DISPOSITIVO
+### 2. FLUXO COMPLETO: DISPOSITIVO
 ### ==========================================
 
-### Cadastrar Novo Dispositivo (Vinculado à Fazenda ID 1)
+### 2.1 Cadastrar Dispositivo
 POST http://127.0.0.1:8080/api/dispositivos
 Content-Type: application/json
 
 {
-  "nomeModelo": "Sensor IoT Soil-V1",
-  "dataInstalacao": "2026-07-20",
+  "nomeModelo": "Estação Meteorológica Alpha",
+  "dataInstalacao": "2026-07-22",
   "status": "ATIVO",
   "fazenda": {
     "id": 1
   }
 }
 
-### Listar Todos os Dispositivos
+### 2.2 Listar Todos os Dispositivos
 GET http://127.0.0.1:8080/api/dispositivos
 
+### 2.3 Buscar Dispositivo por ID (200 OK)
+GET http://127.0.0.1:8080/api/dispositivos/1
+
+### 2.4 Atualizar Status do Dispositivo (PUT - 200 OK)
+PUT http://127.0.0.1:8080/api/dispositivos/1
+Content-Type: application/json
+
+{
+  "nomeModelo": "Estação Meteorológica Alpha v2",
+  "dataInstalacao": "2026-07-22",
+  "status": "MANUTENCAO",
+  "fazenda": {
+    "id": 1
+  }
+}
+
 
 ### ==========================================
-### 3. TESTES DE LEITURA (TELEMETRIA)
+### 3. FLUXO COMPLETO: LEITURA
 ### ==========================================
 
-### Registrar Leitura de Campo (Vinculada ao Dispositivo ID 1)
+### 3.1 Registrar Leitura
 POST http://127.0.0.1:8080/api/leituras
 Content-Type: application/json
 
 {
-  "phSolo": 6.5,
-  "umidadeSolo": 45.2,
-  "temperaturaAr": 28.4,
-  "dataHoraCaptura": "2026-07-20T14:30:00",
+  "phSolo": 6.8,
+  "umidadeSolo": 50.0,
+  "temperaturaAr": 29.1,
+  "dataHoraCaptura": "2026-07-22T09:00:00",
   "dispositivo": {
     "id": 1
   }
 }
 
-### Listar Histórico de Leituras
+### 3.2 Listar Todas as Leituras
 GET http://127.0.0.1:8080/api/leituras
 
+### 3.3 Buscar Leitura por ID (200 OK)
+GET http://127.0.0.1:8080/api/leituras/1
+
 
 ### ==========================================
-### 4. TESTES DE ALERTA
+### 4. FLUXO COMPLETO: ALERTA
 ### ==========================================
 
-### Disparar Alerta de Anomalia (Vinculado ao Dispositivo ID 1)
+### 4.1 Disparar Alerta
 POST http://127.0.0.1:8080/api/alertas
 Content-Type: application/json
 
 {
-  "descricao": "Nível de umidade abaixo do limite crítico na zona norte.",
-  "severidade": "ALTA",
-  "dataHoraDisparo": "2026-07-20T14:35:00",
+  "descricao": "Temperatura do ar acima da média permitida.",
+  "severidade": "MEDIA",
+  "dataHoraDisparo": "2026-07-22T09:05:00",
   "resolvido": false,
   "dispositivo": {
     "id": 1
   }
 }
 
-### Listar Todos os Alertas
-GET http://127.0.0.1:8080/api/alertas
+### 4.2 Resolver Alerta (PUT - Marca como resolvido true)
+PUT http://127.0.0.1:8080/api/alertas/1
+Content-Type: application/json
+
+{
+  "descricao": "Temperatura do ar acima da média permitida.",
+  "severidade": "MEDIA",
+  "dataHoraDisparo": "2026-07-22T09:05:00",
+  "resolvido": true,
+  "dispositivo": {
+    "id": 1
+  }
+}
+
+### 4.3 Deletar Alerta (DELETE - 204 No Content)
+DELETE http://127.0.0.1:8080/api/alertas/1
+
+### 4.4 Confirmar que o Alerta foi Deletado (404 Not Found)
+GET http://127.0.0.1:8080/api/alertas/1

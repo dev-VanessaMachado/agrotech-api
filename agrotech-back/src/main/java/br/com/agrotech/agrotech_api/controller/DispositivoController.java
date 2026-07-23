@@ -17,6 +17,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/api/dispositivos")
+@CrossOrigin(origins = "*")
 public class DispositivoController {
 
     @Autowired

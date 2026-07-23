@@ -17,6 +17,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/api/fazendas")
+@CrossOrigin(origins = "*")
 public class FazendaController {
 
     @Autowired

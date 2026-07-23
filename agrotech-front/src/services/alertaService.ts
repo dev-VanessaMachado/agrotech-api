@@ -1,5 +1,5 @@
 import { api } from './api';
-import { Alerta } from '../types/Alerta';
+import type { Alerta } from '../types/Alerta';
 
 /**
  * Serviço encarregado do consumo dos endpoints referentes aos alertas e anomalias do sistema.

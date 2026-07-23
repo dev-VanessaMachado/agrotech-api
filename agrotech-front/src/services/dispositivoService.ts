@@ -1,5 +1,5 @@
 import { api } from './api';
-import { Dispositivo } from '../types/Dispositivo';
+import type { Dispositivo } from '../types/Dispositivo';
 
 /**
  * Serviço responsável por realizar as chamadas HTTP relacionadas

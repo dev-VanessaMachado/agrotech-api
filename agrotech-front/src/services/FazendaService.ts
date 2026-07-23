@@ -1,5 +1,5 @@
 import { api } from './api';
-import { Fazenda } from '../types/Fazenda';
+import type { Fazenda } from '../types/Fazenda';
 
 /**
  * Serviço responsável por integrar a camada de interface web com a API Spring Boot

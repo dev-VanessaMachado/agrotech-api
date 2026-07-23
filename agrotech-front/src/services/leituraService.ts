@@ -1,5 +1,5 @@
 import { api } from './api';
-import { Leitura } from '../types/Leitura';
+import type { Leitura } from '../types/Leitura';
 
 /**
  * Serviço responsável pela comunicação de dados de telemetria e leituras dos sensores de campo.
